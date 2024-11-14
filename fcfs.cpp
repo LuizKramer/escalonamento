@@ -22,5 +22,7 @@ int main() {
     }
 
     cout << "Tempo médio de espera: " << media(n, p) << endl;
+    printGanttChart(n, p);
+
     return 0;
 }
