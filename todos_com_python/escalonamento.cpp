@@ -126,40 +126,7 @@ void calcular_rr(vector<Processo> &processos, int quantum) {
     }
 
     cout << "RR - Tempo médio de espera: " << (float)tempo_total_espera / n << " unidades\n";
-}
 
-void exibir_diagrama_gantt(const vector<Processo> &processos) {
-    cout << "\nDiagrama de Gantt:\n";
-
-    // Linha superior com os processos
-    cout << " ";
-    for (const auto &p : processos) {
-        for (int i = 0; i < p.tempo_execucao; i++) cout << "-";
-        cout << " ";
-    }
-    cout << "\n|";
-    for (const auto &p : processos) {
-        int espaço = p.tempo_execucao / 2;
-        for (int i = 0; i < espaço; i++) cout << " ";
-        cout << "P" << p.id;
-        for (int i = 0; i < espaço; i++) cout << " ";
-        cout << "|";
-    }
-    cout << "\n ";
-    for (const auto &p : processos) {
-        for (int i = 0; i < p.tempo_execucao; i++) cout << "-";
-        cout << " ";
-    }
-    cout << "\n";
-
-    // Linha inferior com os tempos
-    int tempo_atual = 0;
-    cout << "0";
-    for (const auto &p : processos) {
-        tempo_atual += p.tempo_execucao;
-        cout << setw(p.tempo_execucao + 1) << tempo_atual;
-    }
-    cout << "\n";
 }
 
 void salvar_dados_gantt(const string &arquivo, const vector<Processo> &processos) {
@@ -191,26 +158,22 @@ int main() {
     // FCFS
     copia_processos = processos;
     calcular_fcfs(copia_processos);
-    //exibir_diagrama_gantt(copia_processos);
     salvar_dados_gantt("fcfs.csv", processos);
 
     // SJF
     copia_processos = processos;
     calcular_sjf(copia_processos);
-    //exibir_diagrama_gantt(copia_processos);
     salvar_dados_gantt("sjf.csv", processos);
     
     // Prioridade
     copia_processos = processos;
     calcular_prioridade(copia_processos);
-    //exibir_diagrama_gantt(copia_processos);
     salvar_dados_gantt("pri.csv", processos);
 
     // RR
     int quantum = 3;
     copia_processos = processos;
     calcular_rr(copia_processos, quantum);
-    //exibir_diagrama_gantt(copia_processos);
     salvar_dados_gantt("rr.csv", processos);
 
     return 0;
