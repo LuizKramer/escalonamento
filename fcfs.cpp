@@ -3,7 +3,7 @@
 using namespace std;
 
 int main() {
-    int n = 4;
+    int n = 5;
     Processo p[n];
     cout << "Algoritmo First Come First Serve (FCFS)\nInsira o tempo dos processos:\n";
 

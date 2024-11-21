@@ -4,15 +4,21 @@
 int main() {
     int n = 5;
     Processo p[n];
-    cout << "Shortest Job First (SJF)\nInsira o tempo dos processos:\n";
+    cout << "Prioridades\nInsira o tempo dos processos:\n";
 
     for (int i = 0; i < n; i++) {
         p[i].id = i + 1;
         cout << "P" << p[i].id << ": ";
         cin >> p[i].tempoExecucao;
     }
+   cout << "\nInsira a prioridade dos processos:\n";
 
-    sort(p, p + n, [](Processo a, Processo b) { return a.tempoExecucao < b.tempoExecucao; });
+    for (int i = 0; i < n; i++) {
+        p[i].id = i + 1;
+        cout << "P" << p[i].id << ": ";
+        cin >> p[i].prioriade;
+    }
+    sort(p, p + n, [](Processo a, Processo b) { return a.prioriade < b.prioriade; });
 
     cout << "Processo\tTempo de execução\tTempo de espera\n";
     float tempoEspera = 0;
