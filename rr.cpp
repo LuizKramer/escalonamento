@@ -1,23 +1,21 @@
-
 #include <iostream>
 #include <iomanip>
 #include <vector>
 #include <string>
+#include <algorithm>
 #include "libso.h"
+
 using namespace std;
 
 int main() {
-    int n = 5;           
-    int quantum = 10;    
+    int n = 5, i = 0, j = 0, quantum = 1, tempoAtual = 0, finalizado = 0, somaEspera = 0, somaRetorno = 0;
     Processo processos[n];
     vector<string> gantt;  // Para armazenar a ordem dos processos no Gantt
     vector<int> tempos;    // Para armazenar os tempos de execução
-    int tempoAtual = 0;    // Tempo total acumulado
-    int finalizado = 0;    // Contador de processos finalizados
 
     // Entrada dos tempos de execução
     cout << "Insira o tempo de execução dos processos:" << endl;
-    for (int i = 0; i < n; i++) {
+    for ( i = 0; i < n; i++) {
         processos[i].id = i + 1;
         cout << "P" << processos[i].id << ": ";
         cin >> processos[i].tempoExecucao;
@@ -27,12 +25,12 @@ int main() {
 
     // Criação de variáveis para controle de execução
     int temposRestantes[n];
-    for (int i = 0; i < n; i++) {
+    for ( i = 0; i < n; i++) {
         temposRestantes[i] = processos[i].tempoExecucao; // Copia os tempos de execução
     }
 
     while (finalizado < n) {
-        for (int i = 0; i < n; i++) {
+        for ( i = 0; i < n; i++) {
             if (temposRestantes[i] > 0) { // Se o processo ainda não foi concluído
                 int tempoExec = min(quantum, temposRestantes[i]); // Executa pelo quantum ou pelo tempo restante
                 temposRestantes[i] -= tempoExec;
@@ -41,14 +39,15 @@ int main() {
                 tempos.push_back(tempoAtual);                     // Marca o tempo final deste processo
 
                 // Incrementa o tempo de espera para outros processos
-                for (int j = 0; j < n; j++) {
+                for ( j = 0; j < n; j++) {
                     if (j != i && temposRestantes[j] > 0) {
                         processos[j].tempoEspera += tempoExec;
                     }
                 }
 
-                // Se o processo foi finalizado, incrementa o contador
+                // Se o processo foi finalizado, calcula tempo de retorno
                 if (temposRestantes[i] == 0) {
+                    processos[i].tempoRetorno = tempoAtual;
                     finalizado++;
                 }
             }
@@ -57,23 +56,30 @@ int main() {
 
     // Imprime o diagrama de Gantt
     cout << " ";
-    for (int i = 0; i < gantt.size(); i++) {
+    for ( i = 0; i < gantt.size(); i++) {
         cout << "----";
     }
     cout << "\n|";
-    for (int i = 0; i < gantt.size(); i++) {
+    for ( i = 0; i < gantt.size(); i++) {
         cout << setw(2) << gantt[i] << " |";
     }
     cout << "\n ";
-    for (int i = 0; i < gantt.size(); i++) {
+    for ( i = 0; i < gantt.size(); i++) {
         cout << "----";
     }
     cout << "\n0";
-    for (int i = 0; i < tempos.size(); i++) {
+    for ( i = 0; i < tempos.size(); i++) {
         cout << setw(4) << tempos[i];
     }
     cout << endl;
 
+    // Calcula os tempos médios
+    for ( i = 0; i < n; i++) {
+        somaEspera += processos[i].tempoEspera;
+        somaRetorno += processos[i].tempoRetorno;
+    }
+
+    cout << "\nTempo médio de espera: " << fixed << setprecision(2) << (float)somaEspera / n << " unidades\n";
+
     return 0;
 }
-
